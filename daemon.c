@@ -53,15 +53,16 @@ int get_device_port(unsigned int *ports_buf, unsigned int ports_buf_size)
 
 int main(void)
 {
+    serial_properties_t s_properties = { 9600, 300 };
+
     uint_t ports[PORT_MAX] = {0};
 
     get_active_port_nos(ports, sizeof(ports));
+    uint_t macs_port = get_macs_port_no(ports, sizeof(ports), &s_properties);
 
-    for (uint_t i = 0; i < 10 && ports[i] > 0; ++i)
-        printf ("COM%u\n", ports[i]);
+    printf ("COM%u\n", macs_port);
 
-    serial_properties_t s_properties = { 6, 9600, 300 };
-    serial_handle_t hserial = serial_open(&s_properties);
+    serial_handle_t hserial = serial_open(macs_port, &s_properties);
 
     int bytes_wrote;
     int i = 0;

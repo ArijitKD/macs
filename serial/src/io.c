@@ -21,9 +21,8 @@ void serial_reset(serial_handle_t hserial)
 }
 
 
-serial_handle_t serial_open(serial_properties_t *s_properties)
+serial_handle_t serial_open(uint_t port_no, serial_properties_t *s_properties)
 {
-    uint_t port_no = s_properties->port_no;
     uint_t baud_rate = s_properties->baud_rate;
     uint_t timeout_ms = s_properties->timeout_ms;
 
