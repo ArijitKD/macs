@@ -4,33 +4,37 @@
 #include "../io.h"
 
 
-void serial_reset(serial_handle_t hSerial)
+void serial_reset(serial_handle_t hserial)
 {
-    if (hSerial == NULL)
+    if (hserial == NULL)
         return;
 
-    PurgeComm(hSerial, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_TXABORT | PURGE_RXABORT);
+    PurgeComm(hserial, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_TXABORT | PURGE_RXABORT);
 
-    EscapeCommFunction((serial_handle_t)hSerial, SETDTR);
+    EscapeCommFunction((serial_handle_t)hserial, SETDTR);
     
     Sleep(100); // Wait 100ms (Standard reset pulse duration)
 
-    EscapeCommFunction((serial_handle_t)hSerial, CLRDTR);
+    EscapeCommFunction((serial_handle_t)hserial, CLRDTR);
     
     Sleep(200); // Wait for bootloader to initialize
 }
 
 
-serial_handle_t serial_open(uint_t port_no, uint_t baud_rate, uint_t timeout_ms)
+serial_handle_t serial_open(serial_properties_t *s_properties)
 {
-    serial_handle_t hSerial;
+    uint_t port_no = s_properties->port_no;
+    uint_t baud_rate = s_properties->baud_rate;
+    uint_t timeout_ms = s_properties->timeout_ms;
+
+    serial_handle_t hserial;
     char devpath[MAX_PATH];
 
     if (port_no > PORT_MAX || port_no < PORT_MIN)
         return NULL;
 
     snprintf(devpath, MAX_PATH, "\\\\.\\COM%u", port_no);
-    hSerial = CreateFile(
+    hserial = CreateFile(
                         devpath, 
                         GENERIC_READ | GENERIC_WRITE, 
                         0,
@@ -40,17 +44,17 @@ serial_handle_t serial_open(uint_t port_no, uint_t baud_rate, uint_t timeout_ms)
                         NULL
                     );
 
-    if (hSerial == INVALID_HANDLE_VALUE)
+    if (hserial == INVALID_HANDLE_VALUE)
         return NULL;
 
-    serial_reset(hSerial);
+    serial_reset(hserial);
 
     DCB dcb = {0};
     dcb.DCBlength = sizeof(dcb);
 
-    if (!GetCommState(hSerial, &dcb))
+    if (!GetCommState(hserial, &dcb))
     {
-        CloseHandle(hSerial);
+        CloseHandle(hserial);
         return NULL;
     }
 
@@ -66,26 +70,26 @@ serial_handle_t serial_open(uint_t port_no, uint_t baud_rate, uint_t timeout_ms)
     dcb.fOutX        = FALSE;
     dcb.fInX         = FALSE;
 
-    if (!SetCommState(hSerial, &dcb))
+    if (!SetCommState(hserial, &dcb))
     {
-        CloseHandle(hSerial);
+        CloseHandle(hserial);
         return NULL;
     }
 
     COMMTIMEOUTS timeouts = {0};
     timeouts.ReadTotalTimeoutConstant = timeout_ms;
 
-    if (!SetCommTimeouts(hSerial, &timeouts))
+    if (!SetCommTimeouts(hserial, &timeouts))
     {
-        CloseHandle(hSerial);
+        CloseHandle(hserial);
         return NULL;
     }
 
-    return hSerial;
+    return hserial;
 }
 
 
-int serial_read(serial_handle_t hSerial, char *buf, uint_t count)
+int serial_read(serial_handle_t hserial, char *buf, uint_t count)
 {
     /* count must not exceed sizeof(buf) - 1, where the index
      * sizeof(buf) - 1 is reserved for the null terminator.
@@ -95,12 +99,12 @@ int serial_read(serial_handle_t hSerial, char *buf, uint_t count)
      * And, buf[sizeof(buf) - 1] == buf[strlen(buf)] == '\0'.
      */
 
-    if (hSerial == NULL)
+    if (hserial == NULL)
         return 0;
 
     luint_t bytes_read = 0;
     BOOL status = ReadFile(
-                    hSerial,
+                    hserial,
                     buf,
                     count,
                     &bytes_read, 
@@ -115,14 +119,14 @@ int serial_read(serial_handle_t hSerial, char *buf, uint_t count)
 }
 
 
-int serial_write(serial_handle_t hSerial, char *buf, uint_t count)
+int serial_write(serial_handle_t hserial, char *buf, uint_t count)
 {
     /* buf must be a null-terminated character buffer (a string).
      * count <= (sizeof(buf) - 1) strictly, but there is
      * protection ensured here in this routine...
      */
 
-    if (hSerial == NULL)
+    if (hserial == NULL)
         return 0;
 
     uint_t max_chars = (uint_t)strlen(buf);
@@ -130,7 +134,7 @@ int serial_write(serial_handle_t hSerial, char *buf, uint_t count)
 
     luint_t bytes_written = 0;
     BOOL status = WriteFile(
-                    hSerial,
+                    hserial,
                     buf,
                     count,
                     &bytes_written, 
@@ -143,28 +147,28 @@ int serial_write(serial_handle_t hSerial, char *buf, uint_t count)
 }
 
 
-void serial_close(serial_handle_t hSerial)
+void serial_close(serial_handle_t hserial)
 {
-    if (hSerial == NULL)
+    if (hserial == NULL)
         return;
 
-    PurgeComm(hSerial, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_TXABORT | PURGE_RXABORT);
-    CloseHandle(hSerial);
+    PurgeComm(hserial, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_TXABORT | PURGE_RXABORT);
+    CloseHandle(hserial);
 }
 
 
-int serial_readline(serial_handle_t hSerial, char *buf, uint_t buf_len)
+int serial_readline(serial_handle_t hserial, char *buf, uint_t buf_len)
 {
     /* buf_len must be sizeof(buf) and NOT string length of buf. See
      * comments below serial_read().
      */
 
     uint_t i = 1;
-    serial_read(hSerial, buf, 1);
+    serial_read(hserial, buf, 1);
 
     while (i < (buf_len - 1) && buf[i - 1] != '\n')
     {
-        serial_read(hSerial, buf + i, 1);
+        serial_read(hserial, buf + i, 1);
         i++;
     }
 
