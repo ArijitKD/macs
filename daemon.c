@@ -1,6 +1,6 @@
 #include <windows.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 #include "serial/port.h"
 #include "serial/io.h"
 #include "serial/macs.h"
@@ -53,25 +53,26 @@ int get_device_port(unsigned int *ports_buf, unsigned int ports_buf_size)
 
 int main(void)
 {
-    serial_properties_t s_properties = { 9600, 300 };
+    serial_properties_t s_properties = { MACS_BAUDRATE, MACS_SERIAL_IO_TIMEOUT_MS };
 
     uint_t ports[PORT_MAX] = {0};
 
     get_active_port_nos(ports, sizeof(ports));
     uint_t macs_port = get_macs_port_no(ports, sizeof(ports), &s_properties);
 
-    printf ("COM%u\n", macs_port);
+    printf ("Device detected at port: COM%u\n", macs_port);
 
     serial_handle_t hserial = serial_open(macs_port, &s_properties);
 
     int bytes_wrote;
     int i = 0;
+ 
     while (i < 2)
     {
-        bytes_wrote = serial_write(hserial, "1\n", 100);
+        bytes_wrote = serial_write(hserial, MACS_SET_ON, strlen(MACS_SET_ON));
         printf("Bytes wrote = %d\n", bytes_wrote);
         Sleep(1000);
-        bytes_wrote = serial_write(hserial, "0\n", 100);
+        bytes_wrote = serial_write(hserial, MACS_SET_OFF, strlen(MACS_SET_ON));
         printf("Bytes wrote = %d\n", bytes_wrote);
         i++;
     }
