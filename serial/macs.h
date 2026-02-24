@@ -10,6 +10,7 @@
 
 #define MACS_SET_ON					"1\n"
 #define MACS_SET_OFF				"0\n"
+#define MACS_ON_OFF_WRITE_SIZE      2
 
 #define MACS_BAUDRATE				9600
 #define MACS_SERIAL_IO_TIMEOUT_MS	300
