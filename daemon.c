@@ -1,4 +1,3 @@
-#include <windows.h>
 #include <stdio.h>
 #include <string.h>
 #include "serial/port.h"
@@ -57,10 +56,17 @@ int main(void)
 
     uint_t ports[PORT_MAX] = {0};
 
-    get_active_port_nos(ports, sizeof(ports));
-    uint_t macs_port = get_macs_port_no(ports, sizeof(ports), &s_properties);
+    uint_t active_ports_count = get_active_port_nos(ports, PORT_MAX);
 
-    printf ("Device detected at port: COM%u\n", macs_port);
+    int macs_port = get_macs_port_no(ports, active_ports_count, &s_properties);
+
+    if (macs_port == -1)
+    {
+        printf ("Error: No MACS device found!!!\n");
+        return 1;
+    }
+
+    printf ("MACS device detected at port: COM%d\n", macs_port);
 
     serial_handle_t hserial = serial_open(macs_port, &s_properties);
 
@@ -71,24 +77,11 @@ int main(void)
     {
         bytes_wrote = serial_write(hserial, MACS_SET_ON, strlen(MACS_SET_ON));
         printf("Bytes wrote = %d\n", bytes_wrote);
-        Sleep(1000);
+        serial_wait(1000);
         bytes_wrote = serial_write(hserial, MACS_SET_OFF, strlen(MACS_SET_ON));
         printf("Bytes wrote = %d\n", bytes_wrote);
         i++;
     }
-
-    char buf[11] = {0}; // store atmost 10 characters
-
-    int bytes_read = serial_readline(hserial, buf, sizeof(buf));
-
-    if (bytes_read == -1)
-    {
-        printf ("Serial read error!!!\n");
-        return 1;
-    }
-
-    printf("String = \"%s\"\n", buf);
-    printf("Bytes read = %d\n", bytes_read);
 
     serial_close(hserial);
 

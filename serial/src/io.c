@@ -4,20 +4,25 @@
 #include "../io.h"
 
 
+void serial_wait(uint_t time_ms)
+{
+    Sleep((DWORD)time_ms);
+}
+
+
 void serial_reset(serial_handle_t hserial)
 {
     if (hserial == NULL)
         return;
 
-    PurgeComm(hserial, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_TXABORT | PURGE_RXABORT);
+    PurgeComm(hserial, PURGE_TXCLEAR | PURGE_TXABORT | PURGE_RXCLEAR | PURGE_RXABORT);
 
-    EscapeCommFunction((serial_handle_t)hserial, SETDTR);
-    
-    Sleep(100); // Wait 100ms (Standard reset pulse duration)
+    serial_write(hserial, "\x03", 1);   // \x03 is CTRL-C stops the Pico script
+    serial_wait(50);
 
-    EscapeCommFunction((serial_handle_t)hserial, CLRDTR);
-    
-    Sleep(200); // Wait for bootloader to initialize
+    serial_write(hserial, "\x04", 1);   // \x04 is CTRL-D which resets a Pi Pico
+
+    serial_wait(500); // Wait for bootloader to initialize
 }
 
 
@@ -45,8 +50,6 @@ serial_handle_t serial_open(uint_t port_no, serial_properties_t *s_properties)
 
     if (hserial == INVALID_HANDLE_VALUE)
         return NULL;
-
-    serial_reset(hserial);
 
     DCB dcb = {0};
     dcb.DCBlength = sizeof(dcb);
@@ -142,6 +145,8 @@ int serial_write(serial_handle_t hserial, char *buf, uint_t count)
     if (status == FALSE)
         return -1;
 
+    FlushFileBuffers(hserial);
+
     return (int)bytes_written;
 }
 
@@ -162,19 +167,22 @@ int serial_readline(serial_handle_t hserial, char *buf, uint_t buf_len)
      * comments below serial_read().
      */
 
-    uint_t i = 1;
-    serial_read(hserial, buf, 1);
+    uint_t i = 0;
 
-    while (i < (buf_len - 1) && buf[i - 1] != '\n')
+    while (i < (buf_len - 1))
     {
         serial_read(hserial, buf + i, 1);
+
+        if (buf[i] == '\n')
+            break;
+    
         i++;
     }
 
-    if (buf[i - 1] != '\n' && i == buf_len - 1)
-        return -1; // End of buffer (line incomplete)
+    if (i == (buf_len - 1) && buf[i - 1] != '\n')
+        return -1;  // End of buffer (line incomplete)
 
-    memset(buf + i, 0, buf_len - i);    // zero out remaining buffer
+    memset(buf + (i + 1), 0, buf_len - (i + 1));    // zero out remaining buffer
 
-    return i; // return the line size
+    return (i + 1); // return the line size
 }

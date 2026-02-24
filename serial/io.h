@@ -4,6 +4,7 @@
 #include "port.h"
 #include "types.h"
 
+void serial_wait(uint_t time_ms);
 void serial_reset(serial_handle_t hserial);
 serial_handle_t serial_open(uint_t port_no, serial_properties_t *s_properties);
 int serial_read(serial_handle_t hserial, char *buf, uint_t count);

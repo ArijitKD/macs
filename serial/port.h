@@ -10,6 +10,6 @@ enum Port
     PORT_MAX = 256
 };
 
-void get_active_port_nos(uint_t *ports_buf, uint_t ports_buf_size);
+uint_t get_active_port_nos(uint_t *ports, uint_t ports_count);
 
 #endif
