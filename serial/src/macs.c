@@ -4,7 +4,7 @@
 int get_macs_port_no(uint_t *active_ports, uint_t active_ports_count, serial_properties_t *s_properties)
 {
 	serial_handle_t hserial;
-	uint_t max_read_tries = 3;
+	uint_t max_read_tries = MACS_MAX_RX_READ_TRIES;
 
 	char reply_line[MACS_REPLY_LINE_SIZE + 1] = {0};
 	int bytes_read;
