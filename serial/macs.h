@@ -16,6 +16,13 @@
 #define MACS_BAUDRATE				9600
 #define MACS_SERIAL_IO_TIMEOUT_MS	300
 
+#define MACS_ERR_NO_DEVICE          -2
+#define MACS_ERR_WRITE_FAILURE      -3
+
+#define MACS_STATE_ON               1
+#define MACS_STATE_OFF              0
+
 int get_macs_port_no(uint_t *active_ports, uint_t active_ports_count, serial_properties_t *s_properties);
+void update_macs_state(uint_t state, int *macs_port, int *errcode);
 
 #endif
