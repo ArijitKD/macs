@@ -1,6 +1,6 @@
 #include <windows.h>
 #include <string.h>
-#include <stdio.h>
+#include "../port.h"
 #include "../io.h"
 
 

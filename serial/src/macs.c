@@ -1,5 +1,7 @@
 #include <string.h>
+#include "../io.h"
 #include "../macs.h"
+
 
 int get_macs_port_no(uint_t *active_ports, uint_t active_ports_count, serial_properties_t *s_properties)
 {

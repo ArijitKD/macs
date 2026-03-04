@@ -1,7 +1,6 @@
 #ifndef MACS_SERIAL_IO_H
 #define MACS_SERIAL_IO_H
 
-#include "port.h"
 #include "types.h"
 
 void serial_wait(uint_t time_ms);
