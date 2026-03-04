@@ -186,3 +186,8 @@ int serial_readline(serial_handle_t hserial, char *buf, uint_t buf_len)
 
     return (i + 1); // return the line size
 }
+
+int serial_writeline(serial_handle_t hserial, char *buf, uint_t buf_len)
+{
+    return -1;
+}
