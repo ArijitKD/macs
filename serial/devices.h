@@ -1,0 +1,6 @@
+#ifndef MACS_SERIAL_DEVICES_H
+#define MACS_SERIAL_DEVICES_H
+
+#define RASPBERRY_PI_PICO   1
+
+#endif

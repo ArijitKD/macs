@@ -2,10 +2,12 @@
 #define MACS_SERIAL_MACS_H
 
 #include "types.h"
+#include "devices.h"
 
 #define MACS_DEVICE_NAME			"MACS001"
 #define MACS_REPLY_LINE				"MACS001\r\n"
 #define MACS_REPLY_LINE_SIZE         9
+#define MACS_DEVICE_TYPE            RASPBERRY_PI_PICO
 
 #define MACS_SET_ON					"1\n"
 #define MACS_SET_OFF				"0\n"

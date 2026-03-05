@@ -2,6 +2,8 @@
 #include <string.h>
 #include "../port.h"
 #include "../io.h"
+#include "../devices.h"
+#include "../macs.h"
 
 
 void serial_wait(uint_t time_ms)
@@ -17,12 +19,15 @@ void serial_reset(serial_handle_t hserial)
 
     PurgeComm(hserial, PURGE_TXCLEAR | PURGE_TXABORT | PURGE_RXCLEAR | PURGE_RXABORT);
 
-    serial_write(hserial, "\x03", 1);   // \x03 is CTRL-C stops the Pico script
-    serial_wait(50);
-
-    serial_write(hserial, "\x04", 1);   // \x04 is CTRL-D which resets a Pi Pico
-
-    serial_wait(500); // Wait for bootloader to initialize
+    switch(MACS_DEVICE_TYPE)
+    {
+        case RASPBERRY_PI_PICO:
+            serial_write(hserial, "\x03", 1);   // \x03 is CTRL-C stops the Pico script
+            serial_wait(50);
+            serial_write(hserial, "\x04", 1);   // \x04 is CTRL-D which resets a Pi Pico
+            serial_wait(500); // Wait for bootloader to initialize
+            break;
+    }
 }
 
 
@@ -115,7 +120,7 @@ int serial_read(serial_handle_t hserial, char *buf, uint_t count)
     if (status == FALSE)
         return -1;
 
-    buf[count] = '\0';
+    buf[bytes_read] = '\0';
 
     return (int)bytes_read;
 }
