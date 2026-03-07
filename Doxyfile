@@ -1,0 +1,27 @@
+PROJECT_NAME           = "Modified Automatic Charging System"
+PROJECT_NUMBER         = 1.0.0-alpha
+OUTPUT_DIRECTORY       = docs
+CREATE_SUBDIRS         = NO
+OUTPUT_LANGUAGE        = English
+
+INPUT                  = serial/io.h \
+                         serial/macs.h \
+                         serial/port.h \
+                         serial/types.h \
+                         serial/devices.h \
+                         serial/errcodes.h \
+                         README.md
+
+USE_MDRIP              = YES
+USE_MDFILE_AS_MAINPAGE = README.md
+
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+
+GENERATE_LATEX         = NO
+
+OPTIMIZE_OUTPUT_FOR_C  = YES
