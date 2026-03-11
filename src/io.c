@@ -1,9 +1,9 @@
 #include <windows.h>
 #include <string.h>
-#include "../port.h"
-#include "../io.h"
-#include "../devices.h"
-#include "../macs.h"
+#include "port.h"
+#include "io.h"
+#include "devices.h"
+#include "macs.h"
 
 
 void serial_wait(uint_t time_ms)

@@ -1,6 +1,6 @@
 #include <windows.h>
 #include <stdio.h>
-#include "../port.h"
+#include "port.h"
 
 uint_t get_active_port_nos(uint_t *ports, uint_t ports_count)
 {

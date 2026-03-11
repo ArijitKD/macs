@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef MACS_SERIAL_MACS_H
-#define MACS_SERIAL_MACS_H
+#ifndef MACS_SERIAL_MAIN_H
+#define MACS_SERIAL_MAIN_H
 
 #include "types.h"
 #include "devices.h"

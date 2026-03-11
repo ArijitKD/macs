@@ -3,3 +3,4 @@
 *.o
 *.vs
 CppProperties.json
+build/*

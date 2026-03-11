@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "serial/macs.h"
+#include "macs.h"
 
 
 int main(int argc, char *argv[])
