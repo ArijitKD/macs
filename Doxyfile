@@ -4,15 +4,14 @@ OUTPUT_DIRECTORY       = build/docs
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
 
-INPUT                  = include/io.h \
-                         include/macs.h \
-                         include/port.h \
-                         include/types.h \
-                         include/devices.h \
+INPUT                  = include/serial/devices.h \
+                         include/serial/io.h \
+                         include/serial/port.h \
                          include/errcodes.h \
+                         include/macs.h \
+                         include/types.h \
                          README.md
 
-USE_MDRIP              = YES
 USE_MDFILE_AS_MAINPAGE = README.md
 
 EXTRACT_ALL            = YES
