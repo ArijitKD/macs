@@ -1,7 +1,7 @@
 /**
  * \file macs.h
  *
- * \brief This header contains macros and functions specific to the MACS device.
+ * \brief Main include header, contains all macros and functions specific to the MACS device.
  *
  * Usually, this header is all that should be required to be included in the main
  * source files.
