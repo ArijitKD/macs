@@ -1,6 +1,6 @@
 #include <string.h>
-#include "port.h"
-#include "io.h"
+#include "serial/port.h"
+#include "serial/io.h"
 #include "macs.h"
 #include "errcodes.h"
 

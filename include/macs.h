@@ -8,12 +8,12 @@
  *
  */
 
-#ifndef MACS_SERIAL_MAIN_H
-#define MACS_SERIAL_MAIN_H
+#ifndef MACS_MAIN_H
+#define MACS_MAIN_H
 
 #include "types.h"
-#include "devices.h"
 #include "errcodes.h"   // To allow error code checks in the main source files
+#include "serial/devices.h"
 
 #define MACS_DEVICE_NAME			"MACS001"           /**< \brief Internal name tag/serial number of the MACS device */
 #define MACS_REPLY_LINE				"MACS001\r\n"       /**< \brief String that the device replies with periodically */

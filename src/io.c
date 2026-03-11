@@ -1,8 +1,8 @@
 #include <windows.h>
 #include <string.h>
-#include "port.h"
-#include "io.h"
-#include "devices.h"
+#include "serial/port.h"
+#include "serial/io.h"
+#include "serial/devices.h"
 #include "macs.h"
 
 

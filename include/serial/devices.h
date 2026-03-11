@@ -1,7 +1,7 @@
 /**
  * \file devices.h
  *
- * \brief This header contains macro declarations for supported MACS device types.
+ * \brief This header contains macro declarations for supported MACS serial device types.
  *
  */
 
