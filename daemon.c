@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "serial/macs.h"
-#include "serial/errcodes.h"
 
 
 int main(int argc, char *argv[])

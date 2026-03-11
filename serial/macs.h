@@ -3,6 +3,9 @@
  *
  * \brief This header contains macros and functions specific to the MACS device.
  *
+ * Usually, this header is all that should be required to be included in the main
+ * source files.
+ *
  */
 
 #ifndef MACS_SERIAL_MACS_H
@@ -10,6 +13,7 @@
 
 #include "types.h"
 #include "devices.h"
+#include "errcodes.h"   // To allow error code checks in the main source files
 
 #define MACS_DEVICE_NAME			"MACS001"           /**< \brief Internal name tag/serial number of the MACS device */
 #define MACS_REPLY_LINE				"MACS001\r\n"       /**< \brief String that the device replies with periodically */
