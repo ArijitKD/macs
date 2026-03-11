@@ -109,7 +109,7 @@ int serial_read(serial_handle_t hserial, char *buf, uint_t count)
     if (hserial == NULL)
         return 0;
 
-    luint_t bytes_read = 0;
+    uint_t bytes_read = 0;
     BOOL status = ReadFile(
                     hserial,
                     buf,
@@ -139,7 +139,7 @@ int serial_write(serial_handle_t hserial, char *buf, uint_t count)
     uint_t max_chars = (uint_t)strlen(buf);
     count = (count > max_chars)? max_chars : count; // superman protection
 
-    luint_t bytes_written = 0;
+    uint_t bytes_written = 0;
     BOOL status = WriteFile(
                     hserial,
                     buf,

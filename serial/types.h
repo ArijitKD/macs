@@ -8,8 +8,7 @@
 #ifndef MACS_SERIAL_TYPES_H
 #define MACS_SERIAL_TYPES_H
 
-typedef unsigned int uint_t;		/**< \brief Unsigned integer type */
-typedef long unsigned int luint_t;	/**< \brief Long unsigned integer type */
+typedef unsigned long uint_t;		/**< \brief Unsigned integer type */
 typedef void* serial_handle_t;		/**< \brief Data-type for an open serial device handle */
 
 /** \brief Structure to store required serial properties. */
