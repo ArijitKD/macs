@@ -9,9 +9,7 @@
 
 #include "types.h"
 
-/**
- * \brief Enumeration to store generic port-related constants.
- */
+/** \brief Enumeration to store generic port-related constants.*/
 enum Port
 {
     PORT_NAMELEN_MAX = 7,   /**< Maximum port name length (including port path) */
